@@ -72,7 +72,7 @@ for photographer_info in soup.select('ul.no-bullet.grid.grid-md-2.grid-lg-3 li')
 # Create a DataFrame with the data
 df = pd.DataFrame(photographers)
 
-# Reorder columns (optional)
+# Reorder columns
 df = df[['Name', 'Email', 'Phone', 'Website', 'Date', 'Sunrise Time', 'Sunset Time']]
 
 # Clean the DataFrame by replacing missing values
