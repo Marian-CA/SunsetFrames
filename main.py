@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import time  # Import time module for sleep function
+import re  # Import regex for email validation
 
 # Introductory statement
 print("Looking for the perfect golden hour pictures? This program will help you identify sunrise and sunset times and produce a list of freelance photographers and their contacts so that you can get the perfect golden hour pictures wherever you are!")
@@ -38,9 +39,14 @@ for photographer_info in soup.select('ul.no-bullet.grid.grid-md-2.grid-lg-3 li')
     email_tags = photographer_info.find_all('a', href=True)
     emails = ', '.join([email.get('href').replace('mailto:', '').replace('%20', '').strip() for email in email_tags if 'mailto:' in email.get('href')]) or "No email"
     
+    # Simple email validation
+    if "@" not in emails or "." not in emails:
+        emails = "Invalid email"
+    
     # Extract phone number from the second <br> tag, if available
     br_tags = photographer_info.find_all('br')
     phone = br_tags[1].next_sibling.strip() if len(br_tags) > 1 and br_tags[1].next_sibling else 'No phone number'
+    phone = ''.join(filter(str.isdigit, phone))  # Keep only digits
     
     # Extract the website, if available
     website = next((email.get('href') for email in email_tags if 'http' in email.get('href')), 'No website')
@@ -49,14 +55,15 @@ for photographer_info in soup.select('ul.no-bullet.grid.grid-md-2.grid-lg-3 li')
     sunrise_date, sunrise_time = sunrise.split('T')
     sunset_date, sunset_time = sunset.split('T')
     
+    # Append photographer data
     photographers.append({
-        'Name': name,
-        'Email': emails,
-        'Phone': phone,
-        'Website': website,
-        'Date': date_input,  # Use the user-input date
-        'Sunrise Time': sunrise_time.split('+')[0],  # Remove the timezone part
-        'Sunset Time': sunset_time.split('+')[0]  # Remove the timezone part
+        'Name': name.strip(),  # Clean name
+        'Email': emails.strip(),  # Clean email
+        'Phone': phone.strip(),  # Clean phone
+        'Website': website.strip(),  # Clean website
+        'Date': date_input.strip(),  # Use the user-input date
+        'Sunrise Time': sunrise_time.split('+')[0].strip(),  # Remove the timezone part
+        'Sunset Time': sunset_time.split('+')[0].strip()  # Remove the timezone part
     })
     
     # Sleep for 2 seconds to be ethical
@@ -76,6 +83,7 @@ csv_file = 'formatted_sunrise_sunset_photographers.csv'
 df.to_csv(csv_file, index=False)
 
 print(f"Data has been saved to '{csv_file}'")
+
 
 
 
