@@ -1,4 +1,4 @@
-# Ethical Considerations for Web Scraping
+# Ethical Considerations
 
 ## Purpose of Data Collection
 The purpose of this data collection is to gather publicly available information about freelance photographers and their contact details, as well as sunrise and sunset times for specific locations. This data will help me apply cleaning data techniques, web scraping techniques, and analyze photographer information in a structured format.
