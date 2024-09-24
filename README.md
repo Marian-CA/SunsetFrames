@@ -55,7 +55,7 @@ To run this application, follow these steps:
 
 2. **Install Dependencies**
 
-    - Install the required Python libraries using pip. Create a requirements.txt file 
+    - Install the required Python libraries using pip.
 
     - Then, install the dependencies:
 
